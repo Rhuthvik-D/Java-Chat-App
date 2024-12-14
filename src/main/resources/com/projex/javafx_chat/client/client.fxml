@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<!--<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"-->
+<!--      fx:controller="com.proj.messengerserver.HelloController">-->
+<!--    <padding>-->
+<!--        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>-->
+<!--    </padding>-->
+<!--    <Label fx:id="welcomeText"/>-->
+<!--    <Button text="Hello!" onAction="#onHelloButtonClick"/>-->
+<!--</VBox>-->
+
+<?import javafx.scene.control.PasswordField?>
+<AnchorPane fx:id="ap_main" prefHeight="272.0" prefWidth="467.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.projex.javafx_chat.client.Controller">
+    <children>
+        <Label layoutX="210" layoutY="10" text="Messenger">
+            <font>
+                <Font name = "Arial Rounded MT Bold" size = "23"></Font>
+            </font>
+        </Label>
+
+        <TextField fx:id="tf_username" layoutY="60" layoutX="30" prefWidth="200" promptText="Enter username"/>
+        <PasswordField fx:id="pf_password" layoutX="250" layoutY="60" prefWidth="200" promptText="Enter password"/>
+        <Button fx:id="button_login" layoutX="470" layoutY="60" text="Login" onAction="#handleLogin"/>
+        <ScrollPane fx:id="sp_main" fitToWidth="true" layoutX="30" layoutY="120" prefHeight="256" prefWidth="520">
+            <content>
+                <VBox fx:id="vbox_message" prefHeight="248" prefWidth="512" />
+            </content>
+        </ScrollPane>
+
+        <TextField fx:id="tf_message" layoutX="30" layoutY="400" prefWidth="440" promptText="Enter message" />
+
+        <Button fx:id="button_send" layoutX="404" layoutY="340" text="Send"/>
+
+    </children>
+
+</AnchorPane>
