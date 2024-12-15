@@ -1,24 +1,20 @@
 package com.projex.javafx_chat.client;
 
-import com.projex.javafx_chat.shared.DatabaseUtil;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -28,101 +24,192 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable {
 
     @FXML
-    private Button button_send;
-    @FXML
-    private Button button_login;
-    @FXML
-    private TextField tf_message;
-    @FXML
-    private TextField tf_username;
-    @FXML
-    private PasswordField pf_password;
-    @FXML
     private VBox vbox_message;
+
     @FXML
     private ScrollPane sp_main;
 
+    @FXML
+    private TextField tf_message;
+
+    @FXML
+    private TextField tf_username;
+
+    @FXML
+    private TextField tf_newUsername;
+
+    @FXML
+    private PasswordField pf_password;
+
+    @FXML
+    private PasswordField pf_newPassword;
+
+    @FXML
+    private Button button_send;
+
     private Client client;
-    private boolean isLoggedIn = false;
+
+    private boolean isAuthenticated = false;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        vbox_message.heightProperty().addListener((observableValue, oldValue, newValue) -> sp_main.setVvalue((Double) newValue));
-
-        button_send.setOnAction(event -> sendMessage());
-
-        // Initially disable the send button until the user logs in
-        button_send.setDisable(true);
+        if (vbox_message != null) { // Check if vbox_message is not null
+            vbox_message.heightProperty().addListener((observable, oldValue, newValue) -> sp_main.setVvalue((Double) newValue));
+        }
+        button_send.setDisable(true); // Disable send button until user logs in
     }
 
     @FXML
     public void handleLogin() {
-        String username = tf_username.getText();
-        String password = pf_password.getText();
+        String username = tf_username.getText().trim();
+        String password = pf_password.getText().trim();
 
         if (username.isEmpty() || password.isEmpty()) {
             System.out.println("Please enter both username and password.");
             return;
         }
 
-        if (DatabaseUtil.authenticateUser(username, password)) {
-            System.out.println("Login Successful!");
-            isLoggedIn = true;
-
+        new Thread(() -> {
             try {
+                // Create a new Client object for login
                 client = new Client(new Socket("localhost", 1234), username);
-                client.receiveMessageFromServer(vbox_message);
-                button_send.setDisable(false);
 
+                System.out.println("Sending LOGIN action...");
+                client.sendMessageToServer("LOGIN");  // Step 1: Send action
+                client.sendMessageToServer(username); // Step 2: Send username
+                client.sendMessageToServer(password); // Step 3: Send password
+
+                String response = client.receiveMessage();
+                System.out.println("Server Response: " + response);
+
+                if (response.contains("Login successful")) {
+                    isAuthenticated = true;
+
+                    Platform.runLater(() -> {
+                        enableChatInterface();
+                        System.out.println("Login successful.");
+                    });
+
+                    client.receiveMessageFromServer(vbox_message); // Start listening for incoming messages
+                } else {
+                    Platform.runLater(() -> System.out.println("Invalid credentials."));
+                }
             } catch (IOException e) {
-                System.out.println("Error connecting to the server.");
                 e.printStackTrace();
+                Platform.runLater(() -> System.out.println("Error connecting to server."));
             }
-        } else {
-            System.out.println("Invalid User Credentials");
-        }
+        }).start();
     }
 
-    private void sendMessage() {
-        if (!isLoggedIn) {
-            System.out.println("Please log in first.");
+
+
+
+
+
+
+    @FXML
+    public void handleSignUp() {
+        String username = tf_newUsername.getText().trim();
+        String password = pf_newPassword.getText().trim();
+
+        if (username.isEmpty() || password.isEmpty()) {
+            System.out.println("Please fill out both fields.");
             return;
         }
 
-        String messageToSend = tf_message.getText();
-        if (!messageToSend.isEmpty()) {
-            HBox hBox = new HBox();
-            hBox.setAlignment(Pos.CENTER_RIGHT);
-            hBox.setPadding(new Insets(5, 5, 5, 10));
+        try {
+            client = new Client(new Socket("localhost", 1234), username);
+            client.sendMessageToServer("SIGNUP");
+            client.sendMessageToServer(username);
+            client.sendMessageToServer(password);
 
-            Text text = new Text(messageToSend);
-            TextFlow textFlow = new TextFlow(text);
-            textFlow.setStyle("-fx-color: rgb(239,242,255); " +
-                    "-fx-background-color: rgb(15,215,242); " +
-                    "-fx-background-radius: 20px;");
-            textFlow.setPadding(new Insets(5, 10, 5, 10));
-            text.setFill(Color.color(0.934, 0.945, 0.996));
-
-            hBox.getChildren().add(textFlow);
-            vbox_message.getChildren().add(hBox);
-
-            client.sendMessageToServer(tf_username.getText() + ": " + messageToSend);
-            tf_message.clear();
+            String response = client.receiveMessage();
+            if (response.contains("Registration complete")) {
+                System.out.println(response);
+                showLoginForm();
+            } else {
+                System.out.println(response);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    public static void addLabel(String messageFromServer, VBox vBox) {
+    @FXML
+    public void handleSendMessage() {
+        if (!isAuthenticated) {
+            System.out.println("You must log in first!");
+            return;
+        }
+
+        String messageToSend = tf_message.getText().trim();
+        if (!messageToSend.isEmpty()) {
+            try {
+                // Send the message to the server
+                client.sendMessageToServer(messageToSend);
+
+                // Display the message in the chat window (client-side)
+                HBox hBox = new HBox();
+                hBox.setAlignment(Pos.CENTER_RIGHT);
+                hBox.setPadding(new Insets(5, 5, 5, 10));
+
+                Text text = new Text("You: " + messageToSend);
+                TextFlow textFlow = new TextFlow(text);
+                textFlow.setStyle("-fx-background-color: rgb(15,215,242); -fx-background-radius: 20px;");
+                textFlow.setPadding(new Insets(10));
+                text.setFill(Color.WHITE);
+
+                hBox.getChildren().add(textFlow);
+                Platform.runLater(() -> vbox_message.getChildren().add(hBox));
+
+                tf_message.clear(); // Clear the message input field
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Failed to send message.");
+            }
+        }
+    }
+
+
+    @FXML
+    public void showSignUpForm() {
+        try {
+            Parent signUpRoot = FXMLLoader.load(getClass().getResource("/com/projex/javafx_chat/client/sign_up.fxml"));
+            Stage stage = (Stage) tf_username.getScene().getWindow();
+            stage.setScene(new Scene(signUpRoot, 600, 400));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @FXML
+    public void showLoginForm() {
+        try {
+            Parent loginRoot = FXMLLoader.load(getClass().getResource("/com/projex/javafx_chat/client/client.fxml"));
+            Stage stage = (Stage) tf_newUsername.getScene().getWindow();
+            stage.setScene(new Scene(loginRoot, 600, 400));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void enableChatInterface() {
+        tf_message.setDisable(false);
+        button_send.setDisable(false);
+    }
+
+    public static void addLabel(String message, VBox vBox) {
         HBox hBox = new HBox();
         hBox.setAlignment(Pos.CENTER_LEFT);
         hBox.setPadding(new Insets(5, 5, 5, 10));
 
-        Text text = new Text(messageFromServer);
+        Text text = new Text(message);
         TextFlow textFlow = new TextFlow(text);
-        textFlow.setStyle("-fx-background-color: rgb(233,233,235); " +
-                "-fx-background-radius: 20px;");
-        textFlow.setPadding(new Insets(5, 10, 5, 10));
-        hBox.getChildren().add(textFlow);
+        textFlow.setStyle("-fx-background-color: rgb(233,233,235); -fx-background-radius: 20px;");
+        textFlow.setPadding(new Insets(10));
 
+        hBox.getChildren().add(textFlow);
         Platform.runLater(() -> vBox.getChildren().add(hBox));
     }
 }

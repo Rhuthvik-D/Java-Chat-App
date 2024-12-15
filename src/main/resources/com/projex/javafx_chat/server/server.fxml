@@ -1,74 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--<?import javafx.geometry.Insets?>-->
+<!--<?import javafx.scene.control.Button?>-->
+<!--<?import javafx.scene.control.ComboBox?>-->
+<!--<?import javafx.scene.control.Label?>-->
+<!--<?import javafx.scene.control.ScrollPane?>-->
+<!--<?import javafx.scene.control.TextArea?>-->
+<!--<?import javafx.scene.layout.AnchorPane?>-->
+<!--<?import javafx.scene.text.Font?>-->
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-
-<!--<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"-->
-<!--      fx:controller="com.proj.messengerserver.HelloController">-->
-<!--    <padding>-->
-<!--        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>-->
-<!--    </padding>-->
-<!--    <Label fx:id="welcomeText"/>-->
-<!--    <Button text="Hello!" onAction="#onHelloButtonClick"/>-->
-<!--</VBox>-->
-
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.ComboBox?>
-<!--<AnchorPane fx:id="ap_main" prefHeight="272.0" prefWidth="467.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.projex.javafx_chat.server.Controller">-->
+<!--<AnchorPane fx:id="ap_server" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projex.javafx_chat.server.Controller">-->
 <!--    <children>-->
-<!--        <Button fx:id="button_send" layoutX="404" layoutY="340" text="Send"/>-->
-<!--        <TextField fx:id="tf_message" layoutX="34" layoutY="340" prefHeight="26" prefWidth="361" />-->
-<!--        <ScrollPane fx:id="sp_main" fitToWidth="true" layoutX="30" layoutY="70" prefHeight="256" prefWidth="418">-->
-<!--            <content>-->
-<!--                <VBox fx:id="vbox_message" prefHeight="248" prefWidth="412" />-->
-<!--            </content>-->
-<!--        </ScrollPane>-->
-
-<!--        <Label layoutX="170" layoutY="26" text="Messenger">-->
+<!--        &lt;!&ndash; Title &ndash;&gt;-->
+<!--        <Label layoutX="180.0" layoutY="10.0" text="Server Control Panel">-->
 <!--            <font>-->
-<!--                <Font name="Arial Rounded MT Bold" size="23"></Font>-->
+<!--                <Font name="Arial Rounded MT Bold" size="23" />-->
 <!--            </font>-->
 <!--        </Label>-->
 
+<!--        &lt;!&ndash; Server Logs &ndash;&gt;-->
+<!--        <ScrollPane fx:id="sp_serverLogs" fitToWidth="true" layoutX="20.0" layoutY="50.0" prefHeight="300.0" prefWidth="560.0">-->
+<!--            <content>-->
+<!--                <TextArea fx:id="ta_logs" editable="false" wrapText="true" />-->
+<!--            </content>-->
+<!--        </ScrollPane>-->
 
+<!--        &lt;!&ndash; Label for Connected Users &ndash;&gt;-->
+<!--        <Label layoutX="20.0" layoutY="360.0" text="Connected Users:" />-->
+
+<!--        &lt;!&ndash; Connected Users Dropdown &ndash;&gt;-->
+<!--        <ComboBox fx:id="cb_users" layoutX="120.0" layoutY="355.0" prefWidth="200.0" promptText="Select User" />-->
+
+<!--        &lt;!&ndash; Retrieve Chat Button &ndash;&gt;-->
+<!--        <Button fx:id="button_retrieveChat" layoutX="340.0" layoutY="355.0" text="Retrieve Chat" onAction="#handleRetrieveChat" />-->
+
+<!--        &lt;!&ndash; Start Server Button &ndash;&gt;-->
+<!--        <Button fx:id="button_start" layoutX="20.0" layoutY="430.0" text="Start Server" onAction="#handleStartServer" />-->
+
+<!--        &lt;!&ndash; Stop Server Button &ndash;&gt;-->
+<!--        <Button fx:id="button_stop" layoutX="480.0" layoutY="430.0" text="Stop Server" onAction="#handleStopServer" />-->
 <!--    </children>-->
-
 <!--</AnchorPane>-->
 
-
-<AnchorPane fx:id="ap_main" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.projex.javafx_chat.server.Controller">
-<children>
-    <!-- Title Label -->
-    <Label layoutX="210" layoutY="10" text="Server Dashboard">
-        <font>
-            <Font name="Arial Rounded MT Bold" size="23"></Font>
-        </font>
-    </Label>
-
-    <!-- Server Logs -->
-    <ScrollPane fx:id="sp_serverLogs" fitToWidth="true" layoutX="20.0" layoutY="50.0" prefHeight="300.0" prefWidth="560.0">
-        <content>
-            <TextArea fx:id="ta_serverLogs" editable="false" wrapText="true" />
-        </content>
-    </ScrollPane>
-
-    <!-- Connected Users Dropdown -->
-    <ComboBox fx:id="cb_users" layoutX="20.0" layoutY="370.0" prefWidth="300.0" promptText="Select User" />
-
-    <!-- Retrieve Chat Button -->
-    <Button fx:id="button_retrieveChat" layoutX="340.0" layoutY="370.0" text="Retrieve Chat" />
-
-    <!-- Logs Label -->
-    <Label layoutX="20.0" layoutY="30.0" text="Server Logs:" />
-</children>
-</AnchorPane>
-
-
-
-
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.projex.javafx_chat.server.Controller">
+    <children>
+        <TextArea fx:id="ta_logs" editable="false" wrapText="true" prefHeight="300" />
+        <Button text="Start Server" onAction="#handleStartServer" />
+        <Button text="Stop Server" onAction="#handleStopServer" />
+        <ComboBox fx:id="cb_users" promptText="Select a user" />
+        <Button text="Retrieve Chat" fx:id="button_retrieveChat" onAction="#handleRetrieveChat" />
+    </children>
+</VBox>

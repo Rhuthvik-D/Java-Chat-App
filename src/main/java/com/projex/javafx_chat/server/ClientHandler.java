@@ -1,3 +1,255 @@
+//package com.projex.javafx_chat.server;
+//
+//import com.projex.javafx_chat.shared.DatabaseUtil;
+//
+//import java.io.*;
+//import java.net.Socket;
+//
+//public class ClientHandler implements Runnable {
+//
+//    private Socket socket;
+//    private BufferedReader bufferedReader;
+//    private BufferedWriter bufferedWriter;
+//    private String username;
+//    private Server server;
+//
+//    public ClientHandler(Socket socket, Server server) {
+//        try {
+//            this.socket = socket;
+//            this.server = server;
+//            this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+//            this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+//
+//            authenticateClient();
+//
+//        } catch (IOException e) {
+//            closeEverything(socket, bufferedReader, bufferedWriter);
+//        }
+//    }
+//
+//    private void authenticateClient() throws IOException {
+//        while (true) {
+//            String username = bufferedReader.readLine();
+//            String action = bufferedReader.readLine();
+//            String password = bufferedReader.readLine();
+//
+//            if ("SIGNUP".equals(action)) {
+//                if (DatabaseUtil.isUserExists(username)) {
+//                    sendMessage("Username already exists.");
+//                } else {
+//                    DatabaseUtil.registerUser(username, password);
+//                    sendMessage("Registration Complete");
+//                }
+//            } else if ("LOGIN".equals(action)) {
+//                if (DatabaseUtil.authenticateUser(username, password)) {
+//                    sendMessage("Login successful");
+//                    break;
+//                } else {
+//                    sendMessage("Invalid credentials");
+//                }
+//            }
+//        }
+//    }
+//
+//    @Override
+//    public void run() {
+//        String messageFromClient;
+//
+//        while (socket.isConnected()) {
+//            try {
+//                messageFromClient = bufferedReader.readLine();
+//
+//                if (messageFromClient != null) {
+//                    server.getController().logMessage("Message from " + username + ": " + messageFromClient);
+//                    DatabaseUtil.saveChat(username, messageFromClient);
+//                    server.broadcastMessage(username + ": " + messageFromClient, this);
+//                }
+//            } catch (IOException e) {
+//                closeEverything(socket, bufferedReader, bufferedWriter);
+//                break;
+//            }
+//        }
+//    }
+//
+//    public void sendMessage(String message) {
+//        try {
+//            bufferedWriter.write(message);
+//            bufferedWriter.newLine();
+//            bufferedWriter.flush();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
+//        server.removeClientHandler(this);
+//        try {
+//            if (bufferedReader != null) bufferedReader.close();
+//            if (bufferedWriter != null) bufferedWriter.close();
+//            if (socket != null) socket.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//}
+//----------------------------------------------------------------------------------------------
+//package com.projex.javafx_chat.server;
+//
+//import com.projex.javafx_chat.shared.DatabaseUtil;
+//
+//import java.io.*;
+//import java.net.Socket;
+//
+//public class ClientHandler implements Runnable {
+//
+//    private Socket socket;
+//    private Server server;
+//    private BufferedReader bufferedReader;
+//    private BufferedWriter bufferedWriter;
+//    private String username;
+//    // Reference to server controller
+//
+//
+//    public Socket getSocket(){
+//        return socket;
+//    }
+//
+//    public BufferedWriter getBufferedWriter(){
+//        return bufferedWriter;
+//    }
+//
+//    public BufferedReader getBufferedReader(){
+//        return bufferedReader;
+//    }
+//
+//    public ClientHandler(Socket socket, Server server) {
+//        try {
+//            this.socket = socket;
+//            this.server = server;
+//            this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+//            this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+//
+//            authenticateClient(); // Authenticate client during initialization
+//        } catch (IOException e) {
+//            closeEverything(socket, bufferedReader, bufferedWriter);
+//        }
+//    }
+//
+//    /**
+//     * Authenticates the client, either via login or signup.
+//     *
+//     * @throws IOException if input/output fails during authentication.
+//     */
+//    private void authenticateClient() throws IOException {
+//        while (true) {
+//            String username = bufferedReader.readLine();
+//            String action = bufferedReader.readLine(); // "LOGIN" or "SIGNUP"
+//            String password = bufferedReader.readLine();
+//
+//            if ("SIGNUP".equals(action)) {
+//                if (DatabaseUtil.isUserExists(username)) {
+//                    sendMessage("Username already exists.");
+//                } else {
+//                    DatabaseUtil.registerUser(username, password);
+//                    sendMessage("Registration complete");
+//                }
+//            } else if ("LOGIN".equals(action)) {
+//                if (DatabaseUtil.authenticateUser(username, password)) {
+//                    sendMessage("Login successful");
+//                    this.username = username;
+//                    server.getController().addUserToComboBox(username); // Add user to the ComboBox
+//                    break;
+//                } else {
+//                    sendMessage("Invalid credentials");
+//                }
+//            }
+//        }
+//    }
+//
+//    @Override
+//    public void run() {
+//        String messageFromClient;
+//
+//        while (socket.isConnected()) {
+//            try {
+//                messageFromClient = bufferedReader.readLine();
+//
+//                if (messageFromClient != null) {
+//                    // Log the message in the server logs
+//                    server.getController().logMessage("Message from " + username + ": " + messageFromClient);
+//
+//                    // Save the message to the database
+//                    DatabaseUtil.saveChat(username, messageFromClient);
+//
+//                    // Broadcast the message to all connected clients
+//                    broadcastMessageToOtherClients(messageFromClient);
+//                }
+//            } catch (IOException e) {
+//                closeEverything(socket, bufferedReader, bufferedWriter);
+//                break;
+//            }
+//        }
+//    }
+//
+//    /**
+//     * Sends a message to the client.
+//     *
+//     * @param message The message to send.
+//     */
+//    public void sendMessage(String message) {
+//        try {
+//            bufferedWriter.write(message);
+//            bufferedWriter.newLine();
+//            bufferedWriter.flush();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    /**
+//     * Broadcasts the message to other connected clients.
+//     *
+//     * @param message The message to broadcast.
+//     */
+//    private void broadcastMessageToOtherClients(String message) {
+//        for (ClientHandler clientHandler : server.getController().getClientHandlers()) {
+//            if (!clientHandler.equals(this)) {
+//                clientHandler.sendMessage(username + ": " + message);
+//            }
+//        }
+//    }
+//
+//    /**
+//     * Closes the connections and removes the client handler from the server.
+//     *
+//     * @param socket         The socket to close.
+//     * @param bufferedReader The bufferedReader to close.
+//     * @param bufferedWriter The bufferedWriter to close.
+//     */
+//    public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
+//        server.getController().removeUserFromComboBox(username); // Remove user from ComboBox
+//        server.getController().getClientHandlers().remove(this); // Remove the client handler
+//        try {
+//            if (bufferedReader != null) bufferedReader.close();
+//            if (bufferedWriter != null) bufferedWriter.close();
+//            if (socket != null) socket.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    /**
+//     * Gets the username of the connected client.
+//     *
+//     * @return The username.
+//     */
+//    public String getUsername() {
+//        return username;
+//    }
+//}
+
+//----------------------------------------------------------------------------------------------------------------------
+
 package com.projex.javafx_chat.server;
 
 import com.projex.javafx_chat.shared.DatabaseUtil;
@@ -8,10 +260,10 @@ import java.net.Socket;
 public class ClientHandler implements Runnable {
 
     private Socket socket;
+    private Server server;
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
     private String username;
-    private Server server;
 
     public ClientHandler(Socket socket, Server server) {
         try {
@@ -19,46 +271,75 @@ public class ClientHandler implements Runnable {
             this.server = server;
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-
             authenticateClient();
-
         } catch (IOException e) {
-            closeEverything(socket, bufferedReader, bufferedWriter);
+            System.out.println("DEBUG: Exception during client handler initialization.");
+            closeEverything();
         }
     }
 
     private void authenticateClient() throws IOException {
-        while (true) {
-            String username = bufferedReader.readLine();
 
-            if (DatabaseUtil.isUserExists(username)) {
-                this.username = username;
-                sendMessage("Login successful! Welcome, " + username);
-                server.getController().logMessage("User authenticated: " + username);
+        while (socket.isConnected()) {
+            try {
+                String action = bufferedReader.readLine();
+                if (action == null) break; // Exit if no action is received
+
+                String username = bufferedReader.readLine();
+                if (username == null) break;
+
+                String password = bufferedReader.readLine();
+                if (password == null) break;
+
+                if ("LOGIN".equals(action)) {
+                    if (DatabaseUtil.authenticateUser(username, password)) {
+                        sendMessage("Login successful");
+                        this.username = username;
+                        break;
+                    } else {
+                        sendMessage("Invalid credentials");
+                    }
+                } else if ("SIGNUP".equals(action)) {
+                    if (DatabaseUtil.isUserExists(username)) {
+                        sendMessage("Username already exists.");
+                    } else {
+                        DatabaseUtil.registerUser(username, password);
+                        sendMessage("Registration complete");
+                        server.getController().loadUsersIntoComboBox();
+                        break; // Exit after successful registration
+                    }
+                }
+            } catch (IOException e) {
+                System.out.println("Authentication error");
                 break;
-            } else {
-                sendMessage("Invalid username. Please try again.");
             }
         }
     }
+
+
 
     @Override
     public void run() {
         String messageFromClient;
 
-        while (socket.isConnected()) {
-            try {
+        try {
+            while (true) {
                 messageFromClient = bufferedReader.readLine();
 
-                if (messageFromClient != null) {
-                    server.getController().logMessage("Message from " + username + ": " + messageFromClient);
-                    DatabaseUtil.saveChat(username, messageFromClient);
-                    server.broadcastMessage(username + ": " + messageFromClient, this);
+                if (messageFromClient == null) {
+                    System.out.println("DEBUG: Null message received from client. Disconnecting...");
+                    break; // Exit loop when client disconnects
                 }
-            } catch (IOException e) {
-                closeEverything(socket, bufferedReader, bufferedWriter);
-                break;
+
+                System.out.println("DEBUG: Message from " + username + ": " + messageFromClient);
+                DatabaseUtil.saveChat(username, messageFromClient);
+                server.broadcastMessage(username + ": " + messageFromClient, this);
             }
+        } catch (IOException e) {
+            System.out.println("DEBUG: Exception in client handler for user: " + username);
+        } finally {
+            System.out.println("DEBUG: Cleaning up resources for user: " + username);
+            closeEverything();
         }
     }
 
@@ -68,18 +349,25 @@ public class ClientHandler implements Runnable {
             bufferedWriter.newLine();
             bufferedWriter.flush();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("DEBUG: Error sending message to client: " + username);
         }
     }
 
-    public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
-        server.removeClientHandler(this);
+    public void closeEverything() {
         try {
             if (bufferedReader != null) bufferedReader.close();
             if (bufferedWriter != null) bufferedWriter.close();
             if (socket != null) socket.close();
+            System.out.println("DEBUG: Socket and streams closed for user: " + username);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("DEBUG: Error closing resources for user: " + username);
+        } finally {
+            server.removeClientHandler(this); // Remove client handler from server
         }
     }
+
+    public String getUsername() {
+        return username;
+    }
 }
+

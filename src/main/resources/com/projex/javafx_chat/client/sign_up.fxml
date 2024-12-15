@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--<?import java.lang.*?>-->
+<!--<?import java.util.*?>-->
+<!--<?import javafx.scene.*?>-->
+<!--<?import javafx.scene.control.*?>-->
+<!--<?import javafx.scene.layout.*?>-->
+
+<!--<?import javafx.scene.text.Font?>-->
+<!--<AnchorPane fx:id="ap_signup" prefHeight="400" prefWidth="600" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.projex.javafx_chat.client.Controller">-->
+<!--    <children>-->
+<!--        &lt;!&ndash; Title &ndash;&gt;-->
+<!--        <Label layoutX="210" layoutY="10" text="Register">-->
+<!--            <font>-->
+<!--                <Font name="Arial Rounded MT Bold" size="23" />-->
+<!--            </font>-->
+<!--        </Label>-->
+
+<!--        &lt;!&ndash; New Username Field &ndash;&gt;-->
+<!--        <TextField fx:id="tf_newUsername" layoutX="150.0" layoutY="100.0" promptText="Enter a new username" prefWidth="300.0" />-->
+
+<!--        &lt;!&ndash; New Password Field &ndash;&gt;-->
+<!--        <PasswordField fx:id="pf_newPassword" layoutX="150.0" layoutY="150.0" promptText="Enter a new password" prefWidth="300.0" />-->
+
+<!--        &lt;!&ndash; Register Button &ndash;&gt;-->
+<!--        <Button fx:id="button_register" layoutX="260.0" layoutY="200.0" text="Sign Up" onAction="#handleSignUp" />-->
+
+<!--        &lt;!&ndash; Back to Login Button &ndash;&gt;-->
+<!--        <Button fx:id="button_back" layoutX="260.0" layoutY="250.0" text="Back to Login" onAction="#showLoginForm" />-->
+<!--    </children>-->
+<!--</AnchorPane>-->
+
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.projex.javafx_chat.client.SignUpController">
+    <children>
+        <TextField fx:id="tf_newUsername" promptText="New Username" />
+        <PasswordField fx:id="pf_newPassword" promptText="New Password" />
+        <Button text="Register" onAction="#handleSignUp" />
+        <Button text="Back to Login" onAction="#showLoginForm" />
+    </children>
+</VBox>
+
