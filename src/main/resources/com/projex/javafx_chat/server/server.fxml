@@ -42,14 +42,53 @@
 <!--</AnchorPane>-->
 
 <!--<?xml version="1.0" encoding="UTF-8"?>-->
+<!--=========================================================works===================================================-->
+<!--<?import javafx.scene.control.*?>-->
+<!--<?import javafx.scene.layout.VBox?>-->
+<!--<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.projex.javafx_chat.server.Controller">-->
+<!--    <children>-->
+<!--        <TextArea fx:id="ta_logs" editable="false" wrapText="true" prefHeight="300" />-->
+<!--        <Button text="Start Server" onAction="#handleStartServer" />-->
+<!--        <Button text="Stop Server" onAction="#handleStopServer" />-->
+<!--        <ComboBox fx:id="cb_users" promptText="Select a user" />-->
+<!--        <Button text="Retrieve Chat" fx:id="button_retrieveChat" onAction="#handleRetrieveChat" />-->
+<!--    </children>-->
+<!--</VBox>-->
+
+<!--=================================================================================================================-->
+
+
+
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.VBox?>
-<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.projex.javafx_chat.server.Controller">
-    <children>
-        <TextArea fx:id="ta_logs" editable="false" wrapText="true" prefHeight="300" />
-        <Button text="Start Server" onAction="#handleStartServer" />
-        <Button text="Stop Server" onAction="#handleStopServer" />
-        <ComboBox fx:id="cb_users" promptText="Select a user" />
-        <Button text="Retrieve Chat" fx:id="button_retrieveChat" onAction="#handleRetrieveChat" />
-    </children>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.projex.javafx_chat.server.Controller"
+      spacing="10">
+
+    <Label text="Server Dashboard" style="-fx-font-size: 18px;"/>
+
+    <HBox spacing="10">
+        <Label text="Port:"/>
+        <TextField fx:id="portField" text="1234"/>
+        <Button text="Start Server" onAction="#startServer"/>
+        <Button text="Stop Server" onAction="#stopServer"/>
+    </HBox>
+
+    <TextArea fx:id="serverLogArea" VBox.vgrow="ALWAYS" editable="false"/>
+
+    <Label text="Connected Clients:" />
+    <ListView fx:id="clientListView"/>
+
+    <HBox spacing="10">
+        <ComboBox fx:id="userComboBox" promptText="Select User"/>
+        <Button text="Retrieve Chat" onAction="#handleRetrieveChat"/>
+    </HBox>
+
+    <TextArea fx:id="chatHistoryArea" editable="false" VBox.vgrow="ALWAYS"/>
+
+    <HBox spacing="10">
+        <Button text="Send All text" onAction="#sendAllChat"/>
+    </HBox>
 </VBox>

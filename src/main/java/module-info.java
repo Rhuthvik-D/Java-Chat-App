@@ -7,5 +7,6 @@ module com.projex.javafx_chat {
     opens com.projex.javafx_chat.server to javafx.fxml;
     exports com.projex.javafx_chat.server;
     exports com.projex.javafx_chat.client;
+    exports com.projex.javafx_chat.shared;
     opens com.projex.javafx_chat.client to javafx.fxml;
 }

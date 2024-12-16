@@ -248,126 +248,195 @@
 //    }
 //}
 
+//---------------------------------------------------------works-------------------------------------------------------------
+
+//package com.projex.javafx_chat.server;
+//
+//import com.projex.javafx_chat.shared.DatabaseUtil;
+//
+//import java.io.*;
+//import java.net.Socket;
+//
+//public class ClientHandler implements Runnable {
+//
+//    private Socket socket;
+//    private Server server;
+//    private BufferedReader bufferedReader;
+//    private BufferedWriter bufferedWriter;
+//    private String username;
+//
+//    public ClientHandler(Socket socket, Server server) {
+//        try {
+//            this.socket = socket;
+//            this.server = server;
+//            this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+//            this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+//            authenticateClient();
+//        } catch (IOException e) {
+//            System.out.println("DEBUG: Exception during client handler initialization.");
+//            closeEverything();
+//        }
+//    }
+//
+//    private void authenticateClient() throws IOException {
+//
+//        while (socket.isConnected()) {
+//            try {
+//                String action = bufferedReader.readLine();
+//                if (action == null) break; // Exit if no action is received
+//
+//                String username = bufferedReader.readLine();
+//                if (username == null) break;
+//
+//                String password = bufferedReader.readLine();
+//                if (password == null) break;
+//
+//                if ("LOGIN".equals(action)) {
+//                    if (DatabaseUtil.authenticateUser(username, password)) {
+//                        sendMessage("Login successful");
+//                        this.username = username;
+//                        break;
+//                    } else {
+//                        sendMessage("Invalid credentials");
+//                    }
+//                } else if ("SIGNUP".equals(action)) {
+//                    if (DatabaseUtil.isUserExists(username)) {
+//                        sendMessage("Username already exists.");
+//                    } else {
+//                        DatabaseUtil.registerUser(username, password);
+//                        sendMessage("Registration complete");
+//                        server.getController().loadUsersIntoComboBox();
+//                        break; // Exit after successful registration
+//                    }
+//                }
+//            } catch (IOException e) {
+//                System.out.println("Authentication error");
+//                break;
+//            }
+//        }
+//    }
+//
+//
+//
+//    @Override
+//    public void run() {
+//        String messageFromClient;
+//
+//        try {
+//            while (true) {
+//                messageFromClient = bufferedReader.readLine();
+//
+//                if (messageFromClient == null) {
+//                    System.out.println("DEBUG: Null message received from client. Disconnecting...");
+//                    break; // Exit loop when client disconnects
+//                }
+//
+//                System.out.println("DEBUG: Message from " + username + ": " + messageFromClient);
+//                DatabaseUtil.saveChat(username, messageFromClient);
+//                server.broadcastMessage(username + ": " + messageFromClient, this);
+//            }
+//        } catch (IOException e) {
+//            System.out.println("DEBUG: Exception in client handler for user: " + username);
+//        } finally {
+//            System.out.println("DEBUG: Cleaning up resources for user: " + username);
+//            closeEverything();
+//        }
+//    }
+//
+//    public void sendMessage(String message) {
+//        try {
+//            bufferedWriter.write(message);
+//            bufferedWriter.newLine();
+//            bufferedWriter.flush();
+//        } catch (IOException e) {
+//            System.out.println("DEBUG: Error sending message to client: " + username);
+//        }
+//    }
+//
+//    public void closeEverything() {
+//        try {
+//            if (bufferedReader != null) bufferedReader.close();
+//            if (bufferedWriter != null) bufferedWriter.close();
+//            if (socket != null) socket.close();
+//            System.out.println("DEBUG: Socket and streams closed for user: " + username);
+//        } catch (IOException e) {
+//            System.out.println("DEBUG: Error closing resources for user: " + username);
+//        } finally {
+//            server.removeClientHandler(this); // Remove client handler from server
+//        }
+//    }
+//
+//    public String getUsername() {
+//        return username;
+//    }
+//}
+
 //----------------------------------------------------------------------------------------------------------------------
 
 package com.projex.javafx_chat.server;
 
 import com.projex.javafx_chat.shared.DatabaseUtil;
-
 import java.io.*;
 import java.net.Socket;
 
 public class ClientHandler implements Runnable {
-
     private Socket socket;
     private Server server;
-    private BufferedReader bufferedReader;
-    private BufferedWriter bufferedWriter;
+    private BufferedReader in;
+    private PrintWriter out;
     private String username;
+
+    public String getUsername(){
+        return this.username;
+    }
 
     public ClientHandler(Socket socket, Server server) {
         try {
             this.socket = socket;
             this.server = server;
-            this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            authenticateClient();
+            this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            this.out = new PrintWriter(socket.getOutputStream(), true);
         } catch (IOException e) {
-            System.out.println("DEBUG: Exception during client handler initialization.");
             closeEverything();
         }
     }
 
-    private void authenticateClient() throws IOException {
-
-        while (socket.isConnected()) {
-            try {
-                String action = bufferedReader.readLine();
-                if (action == null) break; // Exit if no action is received
-
-                String username = bufferedReader.readLine();
-                if (username == null) break;
-
-                String password = bufferedReader.readLine();
-                if (password == null) break;
-
-                if ("LOGIN".equals(action)) {
-                    if (DatabaseUtil.authenticateUser(username, password)) {
-                        sendMessage("Login successful");
-                        this.username = username;
-                        break;
-                    } else {
-                        sendMessage("Invalid credentials");
-                    }
-                } else if ("SIGNUP".equals(action)) {
-                    if (DatabaseUtil.isUserExists(username)) {
-                        sendMessage("Username already exists.");
-                    } else {
-                        DatabaseUtil.registerUser(username, password);
-                        sendMessage("Registration complete");
-                        server.getController().loadUsersIntoComboBox();
-                        break; // Exit after successful registration
-                    }
-                }
-            } catch (IOException e) {
-                System.out.println("Authentication error");
-                break;
-            }
-        }
-    }
-
-
-
     @Override
     public void run() {
-        String messageFromClient;
-
         try {
-            while (true) {
-                messageFromClient = bufferedReader.readLine();
+            // First message is always username
+            username = in.readLine();
+            server.getController().refreshUserList();
+            server.getController().logMessage("New client connected: " + username);
+            server.getController().addClientToList(username);
 
-                if (messageFromClient == null) {
-                    System.out.println("DEBUG: Null message received from client. Disconnecting...");
-                    break; // Exit loop when client disconnects
-                }
+            String message;
+            while ((message = in.readLine()) != null) {
+                // Save message to database
+                DatabaseUtil.saveChat(username, message);
 
-                System.out.println("DEBUG: Message from " + username + ": " + messageFromClient);
-                DatabaseUtil.saveChat(username, messageFromClient);
-                server.broadcastMessage(username + ": " + messageFromClient, this);
+                // Broadcast to other clients
+                server.broadcastMessage(username + ": " + message, this);
             }
         } catch (IOException e) {
-            System.out.println("DEBUG: Exception in client handler for user: " + username);
-        } finally {
-            System.out.println("DEBUG: Cleaning up resources for user: " + username);
             closeEverything();
         }
     }
 
     public void sendMessage(String message) {
-        try {
-            bufferedWriter.write(message);
-            bufferedWriter.newLine();
-            bufferedWriter.flush();
-        } catch (IOException e) {
-            System.out.println("DEBUG: Error sending message to client: " + username);
-        }
+        out.println(message);
     }
 
     public void closeEverything() {
         try {
-            if (bufferedReader != null) bufferedReader.close();
-            if (bufferedWriter != null) bufferedWriter.close();
+            if (in != null) in.close();
+            if (out != null) out.close();
             if (socket != null) socket.close();
-            System.out.println("DEBUG: Socket and streams closed for user: " + username);
-        } catch (IOException e) {
-            System.out.println("DEBUG: Error closing resources for user: " + username);
-        } finally {
-            server.removeClientHandler(this); // Remove client handler from server
-        }
-    }
 
-    public String getUsername() {
-        return username;
+            server.getController().removeClientFromList(username);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        server.removeClient(this);
     }
 }
-

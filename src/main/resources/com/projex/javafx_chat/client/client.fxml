@@ -22,21 +22,60 @@
 <!--<?xml version="1.0" encoding="UTF-8"?>-->
 <?import javafx.geometry.Insets?>
 <!--<?xml version="1.0" encoding="UTF-8"?>-->
+<!--======================================================works======================================================-->
+<!--<?import javafx.scene.control.*?>-->
+<!--<?import javafx.scene.layout.*?>-->
+<!--<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.projex.javafx_chat.client.Controller">-->
+<!--    <children>-->
+<!--        <TextField fx:id="tf_username" promptText="Username" />-->
+<!--        <PasswordField fx:id="pf_password" promptText="Password" />-->
+<!--        <Button text="Login" fx:id="button_login" onAction="#handleLogin" />-->
+<!--        <Button text="Sign Up" onAction="#showSignUpForm" />-->
+<!--        <ScrollPane fx:id="sp_main">-->
+<!--            <content>-->
+<!--                <VBox fx:id="vbox_message" />-->
+<!--            </content>-->
+<!--        </ScrollPane>-->
+<!--        <TextField fx:id="tf_message" promptText="Type a message" />-->
+<!--        <Button text="Send" fx:id="button_send" onAction="#handleSendMessage" />-->
+<!--    </children>-->
+<!--</VBox>-->
+
+<!--=================================================================================================================-->
+
+
+
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.projex.javafx_chat.client.Controller">
-    <children>
-        <TextField fx:id="tf_username" promptText="Username" />
-        <PasswordField fx:id="pf_password" promptText="Password" />
-        <Button text="Login" fx:id="button_login" onAction="#handleLogin" />
-        <Button text="Sign Up" onAction="#showSignUpForm" />
-        <ScrollPane fx:id="sp_main">
-            <content>
-                <VBox fx:id="vbox_message" />
-            </content>
-        </ScrollPane>
-        <TextField fx:id="tf_message" promptText="Type a message" />
-        <Button text="Send" fx:id="button_send" onAction="#handleSendMessage" />
-    </children>
-</VBox>
 
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.projex.javafx_chat.client.Controller"
+      spacing="10" alignment="CENTER">
+
+    <VBox fx:id="loginSection" spacing="10" alignment="CENTER">
+        <TextField fx:id="tfusername" promptText="Username"/>
+        <PasswordField fx:id="pfpassword" promptText="Password"/>
+        <HBox spacing="10" alignment="CENTER">
+            <Button text="Login" onAction="#handleLogin"/>
+            <Button text="Sign Up" onAction="#showSignUpForm"/>
+        </HBox>
+    </VBox>
+
+    <VBox fx:id="chatSection" spacing="10" visible="false">
+        <ScrollPane fx:id="spmain">
+            <VBox fx:id="vboxmessage"/>
+        </ScrollPane>
+        <HBox spacing="10">
+            <TextField fx:id="tfmessage" HBox.hgrow="ALWAYS"
+                       promptText="Type a message..."/>
+            <Button text="Send" fx:id="buttonsend"
+                    onAction="#handleSendMessage"/>
+        </HBox>
+        <Button text="Logout" onAction="#handleLogout"/>
+    </VBox>
+
+
+
+
+</VBox>
