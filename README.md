@@ -1,5 +1,7 @@
 # Java Chat Application
 
+Branch 'v2proj' has the updated code
+
 ## Overview
 
 This Java-based chat application allows multiple clients to connect to a single server, enabling communication and broadcasting messages within a closed network. It is designed for use cases like corporate environments where employees need to log their daily updates or scrum activities securely.
