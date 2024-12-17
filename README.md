@@ -17,12 +17,12 @@ This Java-based chat application allows multiple clients to connect to a single 
 
 2. **Project Structure**  
    The project follows the following directory structure:
-
+```
    src/main/java
     ├── client
     ├── server
     └── shared
-
+```
 - The SQLite JAR file is already included, and dependencies have been configured.
 
 3. **Running the Server**  
