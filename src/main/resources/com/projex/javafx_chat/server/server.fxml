@@ -58,37 +58,134 @@
 <!--=================================================================================================================-->
 
 
+<!--===============================WORKING==================================================================================-->
+
+
+<!--<?import javafx.scene.control.*?>-->
+<!--<?import javafx.scene.layout.*?>-->
+
+<!--<VBox xmlns="http://javafx.com/javafx"-->
+<!--      xmlns:fx="http://javafx.com/fxml"-->
+<!--      fx:controller="com.projex.javafx_chat.server.Controller"-->
+<!--      spacing="10">-->
+
+<!--    <Label text="Server Dashboard" style="-fx-font-size: 18px;"/>-->
+
+<!--    <HBox spacing="10">-->
+<!--        <Label text="Port:"/>-->
+<!--        <TextField fx:id="portField" text="1234"/>-->
+<!--        <Button text="Start Server" onAction="#startServer"/>-->
+<!--        <Button text="Stop Server" onAction="#stopServer"/>-->
+<!--    </HBox>-->
+
+<!--    <TextArea fx:id="serverLogArea" VBox.vgrow="ALWAYS" editable="false"/>-->
+
+<!--    <Label text="Connected Clients:" />-->
+<!--    <ListView fx:id="clientListView"/>-->
+
+<!--    <HBox spacing="10">-->
+<!--        <ComboBox fx:id="userComboBox" promptText="Select User"/>-->
+<!--        <Button text="Retrieve Chat" onAction="#handleRetrieveChat"/>-->
+<!--    </HBox>-->
+
+<!--    <TextArea fx:id="chatHistoryArea" editable="false" VBox.vgrow="ALWAYS"/>-->
+
+<!--    <HBox spacing="10">-->
+<!--        <Button text="Send All text" onAction="#sendAllChat"/>-->
+<!--    </HBox>-->
+<!--</VBox>-->
+
+        <!--=================================================================================================================-->
+
+
+<!--<?import javafx.scene.control.*?>-->
+<!--<?import javafx.scene.layout.*?>-->
+<!--<?import javafx.geometry.Insets?>-->
+
+<!--<VBox xmlns="http://javafx.com/javafx"-->
+<!--      xmlns:fx="http://javafx.com/fxml"-->
+<!--      fx:controller="com.projex.javafx_chat.server.Controller"-->
+<!--      spacing="15" style="-fx-background-color: #f0f2f5; -fx-padding: 20;">-->
+
+<!--    <Label text="Server Dashboard"-->
+<!--           style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #1a73e8;"/>-->
+
+<!--    <HBox spacing="15" alignment="CENTER_LEFT"-->
+<!--          style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 10;">-->
+<!--        <Label text="Port:" style="-fx-font-weight: bold;"/>-->
+<!--        <TextField fx:id="portField" text="1234"-->
+<!--                   style="-fx-pref-width: 100; -fx-background-radius: 5;"/>-->
+<!--        <Button text="Start Server" onAction="#startServer"-->
+<!--                style="-fx-background-color: #34a853; -fx-text-fill: white; -fx-padding: 10 20; -fx-background-radius: 5;"/>-->
+<!--        <Button text="Stop Server" onAction="#stopServer"-->
+<!--                style="-fx-background-color: #dc3545; -fx-text-fill: white; -fx-padding: 10 20; -fx-background-radius: 5;"/>-->
+<!--    </HBox>-->
+
+<!--    <TextArea fx:id="serverLogArea" VBox.vgrow="ALWAYS" editable="false"-->
+<!--              style="-fx-background-radius: 10; -fx-border-radius: 10;"/>-->
+
+<!--    <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 10;">-->
+<!--        <Label text="Connected Clients:" style="-fx-font-weight: bold;"/>-->
+<!--        <ListView fx:id="clientListView" prefHeight="100"-->
+<!--                  style="-fx-background-radius: 5; -fx-border-radius: 5;"/>-->
+<!--    </VBox>-->
+
+<!--    <HBox spacing="15" alignment="CENTER_LEFT">-->
+<!--        <ComboBox fx:id="userComboBox" promptText="Select User"-->
+<!--                  style="-fx-pref-width: 200; -fx-background-radius: 5;"/>-->
+<!--        <Button text="Retrieve Chat" onAction="#handleRetrieveChat"-->
+<!--                style="-fx-background-color: #1a73e8; -fx-text-fill: white; -fx-padding: 10 20; -fx-background-radius: 5;"/>-->
+<!--        <Button text="Send All Chat" onAction="#sendAllChat"-->
+<!--                style="-fx-background-color: #fbbc05; -fx-text-fill: white; -fx-padding: 10 20; -fx-background-radius: 5;"/>-->
+<!--    </HBox>-->
+
+<!--    <TextArea fx:id="chatHistoryArea" editable="false" VBox.vgrow="ALWAYS"-->
+<!--              style="-fx-background-radius: 10; -fx-border-radius: 10;"/>-->
+<!--</VBox>-->
+
+<!--        =================================================================================================================-->
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.projex.javafx_chat.server.Controller"
-      spacing="10">
+      spacing="15" style="-fx-background-color: #f0f2f5; -fx-padding: 20;">
 
-    <Label text="Server Dashboard" style="-fx-font-size: 18px;"/>
+    <Label text="Server Dashboard"
+           style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #1a73e8;"/>
 
-    <HBox spacing="10">
-        <Label text="Port:"/>
-        <TextField fx:id="portField" text="1234"/>
-        <Button text="Start Server" onAction="#startServer"/>
-        <Button text="Stop Server" onAction="#stopServer"/>
+    <HBox spacing="15" alignment="CENTER_LEFT"
+          style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 10;">
+        <Label text="Port:" style="-fx-font-weight: bold;"/>
+        <TextField fx:id="portField" text="1234"
+                   style="-fx-pref-width: 100; -fx-background-radius: 5;"/>
+        <Button text="Start Server" onAction="#startServer"
+                style="-fx-background-color: #34a853; -fx-text-fill: white; -fx-padding: 10 20; -fx-background-radius: 5;"/>
+        <Button text="Stop Server" onAction="#stopServer"
+                style="-fx-background-color: #dc3545; -fx-text-fill: white; -fx-padding: 10 20; -fx-background-radius: 5;"/>
     </HBox>
 
-    <TextArea fx:id="serverLogArea" VBox.vgrow="ALWAYS" editable="false"/>
+    <TextArea fx:id="serverLogArea" VBox.vgrow="ALWAYS" editable="false" wrapText="true"
+              style="-fx-background-radius: 10; -fx-border-radius: 10; -fx-font-size: 14px;"/>
 
-    <Label text="Connected Clients:" />
-    <ListView fx:id="clientListView"/>
+    <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 10;">
+        <Label text="Connected Clients:" style="-fx-font-weight: bold;"/>
+        <ListView fx:id="clientListView" prefHeight="100"
+                  style="-fx-background-radius: 5; -fx-border-radius: 5;"/>
+    </VBox>
 
-    <HBox spacing="10">
-        <ComboBox fx:id="userComboBox" promptText="Select User"/>
-        <Button text="Retrieve Chat" onAction="#handleRetrieveChat"/>
+    <HBox spacing="15" alignment="CENTER_LEFT">
+        <ComboBox fx:id="userComboBox" promptText="Select User"
+                  style="-fx-pref-width: 200; -fx-background-radius: 5;"/>
+        <Button text="Retrieve Chat" onAction="#handleRetrieveChat"
+                style="-fx-background-color: #1a73e8; -fx-text-fill: white; -fx-padding: 10 20; -fx-background-radius: 5;"/>
+        <Button text="Send All Chat" onAction="#sendAllChat"
+                style="-fx-background-color: #fbbc05; -fx-text-fill: white; -fx-padding: 10 20; -fx-background-radius: 5;"/>
     </HBox>
 
-    <TextArea fx:id="chatHistoryArea" editable="false" VBox.vgrow="ALWAYS"/>
-
-    <HBox spacing="10">
-        <Button text="Send All text" onAction="#sendAllChat"/>
-    </HBox>
+    <TextArea fx:id="chatHistoryArea" editable="false" VBox.vgrow="ALWAYS" wrapText="true"
+              style="-fx-background-radius: 10; -fx-border-radius: 10; -fx-font-size: 14px;"/>
 </VBox>
