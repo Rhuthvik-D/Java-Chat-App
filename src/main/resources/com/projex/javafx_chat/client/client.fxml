@@ -44,38 +44,110 @@
 <!--=================================================================================================================-->
 
 
+<!--==========================WORKING=======================================================================================-->
 
+<!--<?import javafx.scene.control.*?>-->
+<!--<?import javafx.scene.layout.*?>-->
+
+<!--<VBox xmlns="http://javafx.com/javafx"-->
+<!--      xmlns:fx="http://javafx.com/fxml"-->
+<!--      fx:controller="com.projex.javafx_chat.client.Controller"-->
+<!--      spacing="10" alignment="CENTER">-->
+
+<!--    <VBox fx:id="loginSection" spacing="10" alignment="CENTER">-->
+<!--        <TextField fx:id="tfusername" promptText="Username"/>-->
+<!--        <PasswordField fx:id="pfpassword" promptText="Password"/>-->
+<!--        <HBox spacing="10" alignment="CENTER">-->
+<!--            <Button text="Login" onAction="#handleLogin"/>-->
+<!--            <Button text="Sign Up" onAction="#showSignUpForm"/>-->
+<!--        </HBox>-->
+<!--    </VBox>-->
+
+<!--    <VBox fx:id="chatSection" spacing="10" visible="false">-->
+<!--        <ScrollPane fx:id="spmain">-->
+<!--            <VBox fx:id="vboxmessage"/>-->
+<!--        </ScrollPane>-->
+<!--        <HBox spacing="10">-->
+<!--            <TextField fx:id="tfmessage" HBox.hgrow="ALWAYS"-->
+<!--                       promptText="Type a message..."/>-->
+<!--            <Button text="Send" fx:id="buttonsend"-->
+<!--                    onAction="#handleSendMessage"/>-->
+<!--        </HBox>-->
+<!--        <Button text="Logout" onAction="#handleLogout"/>-->
+<!--    </VBox>-->
+
+
+
+
+<!--</VBox>-->
+<!--        =================================================================================================================-->
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.projex.javafx_chat.client.Controller"
-      spacing="10" alignment="CENTER">
+      spacing="15" alignment="CENTER"
+      style="-fx-background-color: #ffffff; -fx-padding: 20;">
 
-    <VBox fx:id="loginSection" spacing="10" alignment="CENTER">
-        <TextField fx:id="tfusername" promptText="Username"/>
-        <PasswordField fx:id="pfpassword" promptText="Password"/>
-        <HBox spacing="10" alignment="CENTER">
-            <Button text="Login" onAction="#handleLogin"/>
-            <Button text="Sign Up" onAction="#showSignUpForm"/>
+    <VBox fx:id="loginSection" spacing="15" alignment="CENTER"
+          style="-fx-background-color: white; -fx-padding: 30; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+        <Label text="Messenger - Login"
+               style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #1a73e8;"/>
+
+        <TextField fx:id="tfusername" promptText="Username"
+                   style="-fx-pref-width: 300; -fx-padding: 12; -fx-background-radius: 25; -fx-border-color: #e0e0e0; -fx-border-radius: 25;"/>
+        <PasswordField fx:id="pfpassword" promptText="Password"
+                       style="-fx-pref-width: 300; -fx-padding: 12; -fx-background-radius: 25; -fx-border-color: #e0e0e0; -fx-border-radius: 25;"/>
+
+        <HBox spacing="15" alignment="CENTER">
+            <Button text="Login" onAction="#handleLogin"
+                    style="-fx-background-color: #1a73e8; -fx-text-fill: white; -fx-padding: 12 30; -fx-background-radius: 25; -fx-cursor: hand;"/>
+            <Button text="Sign Up" onAction="#showSignUpForm"
+                    style="-fx-background-color: #34a853; -fx-text-fill: white; -fx-padding: 12 30; -fx-background-radius: 25; -fx-cursor: hand;"/>
         </HBox>
     </VBox>
 
-    <VBox fx:id="chatSection" spacing="10" visible="false">
-        <ScrollPane fx:id="spmain">
-            <VBox fx:id="vboxmessage"/>
+    <VBox fx:id="chatSection" spacing="0" visible="false" VBox.vgrow="ALWAYS"
+          style="-fx-background-color: white; -fx-background-radius: 10;">
+
+        <ScrollPane fx:id="spmain" VBox.vgrow="ALWAYS" fitToWidth="true"
+                    style="-fx-background: white; -fx-background-color: white; -fx-border-width: 0;">
+            <VBox fx:id="vboxmessage" spacing="10" style="-fx-padding: 20;">
+                <style>
+                    .message-bubble {
+                    -fx-padding: 50 15;
+                    -fx-background-radius: 20;
+                    -fx-max-width: 80%;
+                    -fx-wrap-text: true;
+                    }
+                    .sent-message {
+                    -fx-background-color: #1a73e8;
+                    -fx-text-fill: white;
+                    -fx-alignment: CENTER-RIGHT;
+                    -fx-wrap-text: true;
+                    }
+                    .received-message {
+                    -fx-background-color: #f1f3f4;
+                    -fx-text-fill: black;
+                    -fx-alignment: CENTER-LEFT;
+                    -fx-wrap-text: true;
+                    }
+                </style>
+            </VBox>
         </ScrollPane>
-        <HBox spacing="10">
+
+        <HBox spacing="10" alignment="CENTER" style="-fx-padding: 15; -fx-background-color: #f8f9fa;">
             <TextField fx:id="tfmessage" HBox.hgrow="ALWAYS"
-                       promptText="Type a message..."/>
-            <Button text="Send" fx:id="buttonsend"
-                    onAction="#handleSendMessage"/>
+                       promptText="Type a message..."
+                       style="-fx-padding: 12; -fx-background-radius: 25; -fx-border-color: #e0e0e0; -fx-border-radius: 25;"/>
+            <Button text="Send" fx:id="buttonsend" onAction="#handleSendMessage"
+                    style="-fx-background-color: #1a73e8; -fx-text-fill: white; -fx-padding: 12 25; -fx-background-radius: 25; -fx-cursor: hand;"/>
         </HBox>
-        <Button text="Logout" onAction="#handleLogout"/>
+
+        <Button text="Logout" onAction="#handleLogout"
+                style="-fx-background-color: #dc3545; -fx-text-fill: white; -fx-padding: 10 20; -fx-background-radius: 5; -fx-cursor: hand; -fx-margin: 10;"/>
     </VBox>
-
-
-
-
 </VBox>
+<!--        =================================================================================================================-->
