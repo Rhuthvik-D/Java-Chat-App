@@ -1,0 +1,28 @@
+Hello, This is our JAVA CHATAPP! 
+By Hemaksh Chaturvedi (hac9624) and Rhuthvik Dendukuri (rd3377)
+
+With this application we can open multiple client windows and one singular server to text and send broadcasts to all online users.
+
+The purpose of this project is to create a secure logging chat for a closed network such as a company whose employees work on a cloud or VM system. Using this chatapp the employees can send their daily work log and scrum updates to the server and have it saved in the server. 
+
+If they ever need to see the previous updates or broadcast they can ask the server admin to retrieve their chats and send it back to the them.
+
+We will showcase this functionality in this demonstration.
+
+- First we launch, 'Server/Main.java'. This will initiate the server.
+
+- Now we will launch 'Client/Main.java'. You can run as many clients as needed. They will all be connected to the Server app.
+
+- Now that client side and server are both open we can either choose to register a new user or use existing login. 
+
+- In the first client window we have registered a new user.
+
+- In the second client window we have logged in as 'testuser'
+
+- We will send messages from both client. This is visible as a broadcast to other online users and the server
+
+- We will now showcase the servers ability to retrieve chats
+
+- Now that the chat is retrieved we will send the chat back to the user
+
+THANK YOU
