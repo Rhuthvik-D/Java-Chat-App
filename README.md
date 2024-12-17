@@ -1,5 +1,7 @@
 ## Java Chat Application
 
+The branch 'v2proj' is the branch with the updated code
+
 - Once zip is obtained, unzip the project. Open it in Eclipse. In the project, there is also SQLite jar file included. The JAR dependencies have already been added.
 
 - In src/main/java, there are subfolders, namely client, server and shared. Open the "main.java" in com.projex.javafx_chat.sever. Run it as a java application.
